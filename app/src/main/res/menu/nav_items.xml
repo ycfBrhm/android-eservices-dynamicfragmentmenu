@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/list"
+            android:orderInCategory="0"
+            android:title="@string/menu_entry_one"
+            android:icon="@drawable/ic_apps" />
+        <item
+            android:id="@+id/favorites"
+            android:orderInCategory="1"
+            android:title="@string/menu_entry_two"
+            android:icon="@drawable/ic_favorite"
+            app:actionLayout="@layout/menu_notification_counter" />
+        <item
+            android:id="@+id/logoff"
+            android:orderInCategory="2"
+            android:title="@string/menu_entry_three"
+            android:icon="@drawable/ic_logoff" />
+    </group>
+</menu>

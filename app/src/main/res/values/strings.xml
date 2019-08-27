@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">DynamicFragmentMenu</string>
+    <string name="menu_entry_one">My Selection</string>
+    <string name="menu_entry_two">My Favorites</string>
+    <string name="menu_entry_three">Log off</string>
+    <string name="drawer_open">OPEN</string>
+    <string name="drawer_close">CLOSE</string>
+
+    <string name="counter_full">9+</string>
+
+    <string name="favorite_counter_label">Update the counter !</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
