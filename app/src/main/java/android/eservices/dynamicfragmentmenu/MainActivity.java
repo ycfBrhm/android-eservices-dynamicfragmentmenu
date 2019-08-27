@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         setContentView(R.layout.activity_main);
         setupNavigationElements();
 
-        int menuItemNumberToSelect;
         if (savedInstanceState != null) {
             //State had been saved so we need to restore the right fragment
             //No need to check the menu item because savedInstance restores automatically the view states
@@ -79,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
                 }
                 //If selection is not logoff, display the right screen
                 if (navigationView.getCheckedItem() != menuItem) {
-                    System.out.println(menuItem.getOrder());
                     replaceFragment(getSelectedMenuFragment(menuItem.getOrder()));
                 }
                 drawerLayout.closeDrawers();
