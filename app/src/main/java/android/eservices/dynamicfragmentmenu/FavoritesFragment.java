@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -56,10 +57,12 @@ public class FavoritesFragment extends Fragment {
         System.out.println("On activity created " + this);
         setupButtons();
 
-        //TODO if available, restore the state of the current counter
-        //TODO if there is no value to restore, set the counter to default value 4
-        //TODO finally call refreshCounter to update the display
-
+        if (savedInstanceState != null) {
+            currentCounter = savedInstanceState.getInt(COUNTER_STATE_KEY);
+        } else {
+            currentCounter = 4;
+        }
+        refreshCounter();
     }
 
     private void setupButtons() {
@@ -92,11 +95,15 @@ public class FavoritesFragment extends Fragment {
     private void refreshCounter() {
         counterTextView.setText(Integer.toString(currentCounter));
         removeButton.setEnabled(currentCounter != 0);
-        navigationInterface.updateFavoriteCounter(currentCounter);
+        if (navigationInterface != null) {
+            navigationInterface.updateFavoriteCounter(currentCounter);
+        }
     }
 
 
-    //TODO save the state of the counter i.e. the current counter number
-    //TODO in order to restore it later
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(COUNTER_STATE_KEY, currentCounter);
+    }
 }
