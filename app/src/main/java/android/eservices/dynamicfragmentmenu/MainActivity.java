@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -33,17 +32,14 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         setContentView(R.layout.activity_main);
         setupNavigationElements();
 
-        if (savedInstanceState != null) {
-            //State had been saved so we need to restore the right fragment
-            //No need to check the menu item because savedInstance restores automatically the view states
-            //We need to store the fragment inside our array so it won't be recreated
-            currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STORED_KEY);
-            replaceFragment(currentFragment);
-            fragmentArray.append(savedInstanceState.getInt(FRAGMENT_NUMBER_KEY), currentFragment);
-        } else {
-            //Set default screen to "My Selection", i.e. the first menu element
-            navigationView.setSelectedItem(navigationView.getMenu().getItem(0));
-        }
+
+        //TODO Restore instance state
+        //If available :
+        //1° - Retrieve the stored fragment from the saved bundle (see SO link in indications below, bottom of the class)
+        //2° - Use the replace fragment to display the retrieved fragment
+        //3° - Add the restored fragment to the cache so it is not recreated when selected the menu item again
+        //If the bundle is null, then display the default fragment using navigationView.setSelectedItem();
+        //Reminder, to get a menu item, use navigationView.getMenu().getItem(idex)
 
         //Let's imagine we retrieve the stored counter state, before creating the favorite Fragment
         //and then be able to update and manage its state.
@@ -70,50 +66,25 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getOrder() == 2) {
-                    //Log off and then
-                    logoff();
-                    //We don't want to set the selected item to selected state
-                    return false;
-                }
-                //If selection is not logoff, display the right screen
-                if (navigationView.getCheckedItem() != menuItem) {
-                    replaceFragment(getSelectedMenuFragment(menuItem.getOrder()));
-                }
-                drawerLayout.closeDrawers();
-                return true;
+                //TODO react according to the selected item menu
+                //We need to display the right fragment according to the menu item selection.
+                //Any created fragment must be cached so it is only created once.
+                //You need to implement this "cache" manually : when you create a fragment based on the menu item,
+                //store it the way you prefer, so when you select this menu item later, you first check if the fragment already exists
+                //and then you use it. If the fragment doesn't exist (it is not cached then) you get an instance of it and store it in the cache.
+
+
+                //TODO when we select logoff, I want the Activity to be closed (and so the Application, as it has only one activity)
+
+                //check in the doc what this boolean means and use it the right way ...
+                return false;
             }
         });
     }
 
-    private Fragment getSelectedMenuFragment(int position) {
-        Fragment selectedFragment = fragmentArray.get(position);
-        if (selectedFragment == null) {
-            switch (position) {
-                //List screen
-                case 0:
-                    selectedFragment = SelectedFragment.newInstance();
-                    break;
-                //Favorites screen
-                case 1:
-                    selectedFragment = FavoritesFragment.newInstance();
-                    break;
-                //Default, let's go back to list screen
-                default:
-                    selectedFragment = SelectedFragment.newInstance();
-                    break;
-            }
-            fragmentArray.append(position, selectedFragment);
-        }
-        currentFragment = selectedFragment;
-        return selectedFragment;
-    }
 
     private void replaceFragment(Fragment newFragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        //TODO replace fragment inside R.id.fragment_container using a FragmentTransaction
     }
 
     private void logoff() {
@@ -134,13 +105,10 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         ((TextView) counterView.findViewById(R.id.counter_view)).setText(counterContent);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        //we need to save the state of the current selected fragment,
-        //so in case of orientation change, the right fragment will be displayed
-        savedInstanceState.putInt(FRAGMENT_NUMBER_KEY, navigationView.getCheckedItem().getOrder());
-        getSupportFragmentManager().putFragment(savedInstanceState, FRAGMENT_STORED_KEY, currentFragment);
 
-    }
+    //TODO saveInstanceState to handle
+    //TODO first save the currently displayed fragment index using the key FRAGMENT_NUMBER_KEY, and getOrder() on the menu item
+    //Reminder, to get the selected item in the menu, we can use myNavView.getCheckedItem()
+    //TODO then save the current state of the fragment, you may read https://stackoverflow.com/questions/15313598/once-for-all-how-to-correctly-save-instance-state-of-fragments-in-back-stack
+
 }
