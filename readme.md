@@ -1,4 +1,4 @@
-# android-eservices-staticfragmenttabs
+# android-eservices-dynamicfragmentmenu
 
 Deuxième TP, toujours les fragments, mais de manière dynamique cette fois !
 
