@@ -1,6 +1,7 @@
 package android.eservices.dynamicfragmentmenu;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,10 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTabHost;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.Console;
 
 public class MainActivity extends AppCompatActivity implements NavigationInterface {
 
@@ -25,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
     private SelectableNavigationView navigationView;
     private SparseArray<Fragment> fragmentArray;
     private Fragment currentFragment;
+
+    private FavoritesFragment favoritesFragment;
+    private SelectedFragment selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,17 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if(menuItem.getItemId() == R.id.favorites){
+                    favoritesFragment= FavoritesFragment.newInstance();
+                    replaceFragment(favoritesFragment);
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }else if(menuItem.getItemId() == R.id.list){
+
+                    selectedFragment= SelectedFragment.newInstance();
+                    replaceFragment(selectedFragment);
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+
                 //TODO react according to the selected item menu
                 //We need to display the right fragment according to the menu item selection.
                 //Any created fragment must be cached so it is only created once.
@@ -85,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
 
     private void replaceFragment(Fragment newFragment) {
         //TODO replace fragment inside R.id.fragment_container using a FragmentTransaction
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,newFragment).commit();
+
+
+
     }
 
     private void logoff() {
